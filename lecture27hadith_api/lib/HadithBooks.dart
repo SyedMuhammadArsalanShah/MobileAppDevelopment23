@@ -72,9 +72,10 @@ class _HadithBooksState extends State<HadithBooks> {
                       datalist[index]["bookName"].toString(),
                       style: TextStyle(fontFamily: "alq"),
                     ),
-                    subtitle: Text(datalist[index]["writerName"].toString()),
+                    // subtitle: Text(datalist[index]["writerName"].toString()),
                     leading: Text("${index + 1}"),
                     trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         datalist[index]["hadiths_count"] == "0"
                             ? Text("")

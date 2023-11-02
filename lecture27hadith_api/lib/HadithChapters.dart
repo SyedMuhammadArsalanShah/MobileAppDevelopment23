@@ -65,7 +65,7 @@ class _HadithChaptersState extends State<HadithChapters> {
                     onTap: () {
                       var bookSlug = datalist[index]["bookSlug"];
                       var chapterNumber = datalist[index]["chapterNumber"];
-                
+
                       print(bookSlug + chapterNumber);
                       Navigator.push(
                           context,
@@ -74,28 +74,49 @@ class _HadithChaptersState extends State<HadithChapters> {
                                 Hadiths(bookSlug, chapterNumber),
                           ));
                     },
-                    tileColor:  Color(0XFFF2F2F2),
-                      textColor: Color(0XFF404040),
-                    title: Text(
-                      datalist[index]["chapterArabic"].toString(),
-                      style: TextStyle(fontFamily: "alq",fontSize: 20),
+                    tileColor: Color(0XFFF2F2F2),
+                    textColor: Color(0XFF404040),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                         CircleAvatar(
+                        backgroundColor: Color(0XFF0D0D0D),
+                        child: Text(
+                          "${index + 1}",
+                          style: TextStyle(color: Color(0XFFF2F2F2)),
+                        )),
+                          SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          datalist[index]["chapterArabic"].toString(),
+                          style: TextStyle(fontFamily: "alq", fontSize: 15),
+                          textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.justify,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(datalist[index]["chapterUrdu"].toString(),
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontFamily: "jameel")),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          datalist[index]["chapterEnglish"].toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    subtitle: Text(datalist[index]["chapterEnglish"].toString(),
-                    style: TextStyle(fontSize: 16)
-                    
-                    ),
-                    leading: Text("${index + 1}"),
-                    trailing: Text(
-                      datalist[index]["chapterUrdu"].toString(),
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(fontFamily: "jameel",fontSize: 20)
-                    ),
+                    // leading:
                   ),
                 );
               },
               itemCount: datalist.length,
             ),
-             backgroundColor: Color(0XFFD9D9D9),
+      backgroundColor: Color(0XFFD9D9D9),
     );
   }
 }

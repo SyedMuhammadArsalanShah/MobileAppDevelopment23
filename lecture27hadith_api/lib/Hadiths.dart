@@ -49,10 +49,10 @@ class _HadithsState extends State<Hadiths> {
       appBar: AppBar(
         title: Text(
           "Hadith Books Collection",
-          style: TextStyle(color:Color(0XFFF2EDE4)),
+          style: TextStyle(color:Color(0XFFF2F2F2),),
         ),
         centerTitle: true,
-        backgroundColor:Color(0XFF736F68),
+        backgroundColor: Color(0XFF595959),
       ),
       body: datalist.isEmpty
           ? Center(
@@ -60,41 +60,72 @@ class _HadithsState extends State<Hadiths> {
             )
           : ListView.builder(
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                        leading:
-                            Text(datalist[index]["hadithNumber"].toString()),
-                        title: Text(
-                            "Status :" + datalist[index]["status"].toString())),
-                    Card(
-                      child: Text(
-                        datalist[index]["hadithArabic"].toString(),
-                        style: const TextStyle(
-                          fontFamily: "alq",
+                return Card(
+                  color: Color(0XFFD9D9D9),
+                  child: Column(
+                    children: [
+                      ListTile(
+                          title: Text("Hadith Number #" +
+                              datalist[index]["hadithNumber"].toString()),
+                          trailing: Text("Status :" +
+                              datalist[index]["status"].toString())),
+                      Card(
+                         color: Color(0XFFF2F2F2),
+                        child: Container(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              datalist[index]["hadithArabic"].toString(),
+                              style: const TextStyle(
+                                fontFamily: "alq",
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 77, 64)
+                              ),
+                              textAlign: TextAlign.justify,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
                         ),
-                        textDirection: TextDirection.rtl,
                       ),
-                    ),
-                    Card(
-                      child: Text(
-                        datalist[index]["hadithUrdu"].toString(),
-                        style: const TextStyle(
-                          fontFamily: "alq",
+                      Card(
+                         color: Color(0XFFF2F2F2),
+                        child: Container(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              datalist[index]["hadithUrdu"].toString(),
+                              style: const TextStyle(
+                                fontFamily: "jameel",
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.justify,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
                         ),
-                        textDirection: TextDirection.rtl,
                       ),
-                    ),
-                    Card(
-                      child: Text(
-                        datalist[index]["hadithEnglish"].toString(),
-                        style: const TextStyle(
-                          fontFamily: "alq",
+                      Card(
+                         color: Color(0XFFF2F2F2),
+                        child: Container(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              datalist[index]["hadithEnglish"].toString(),
+                              style: const TextStyle(
+                                fontFamily: "alq",
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.justify,
+                              textDirection: TextDirection.ltr,
+                            ),
+                          ),
                         ),
-                        textDirection: TextDirection.rtl,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
               itemCount: datalist.length,
