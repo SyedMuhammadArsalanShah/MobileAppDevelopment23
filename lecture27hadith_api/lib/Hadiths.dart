@@ -131,6 +131,6 @@ class _HadithsState extends State<Hadiths> {
               itemCount: datalist.length,
             ),
     );
-    ;
+    
   }
 }
