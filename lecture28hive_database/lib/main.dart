@@ -43,8 +43,14 @@ class _HomeState extends State<Home> {
 
   void createdata(Map<String, dynamic> data) async {
     taskbox.add(data);
-readdata();
+    readdata();
     print("my hive db length =>${taskbox.length}");
+  }
+
+  void updatedata(Map<String, dynamic> data, key) async {
+    taskbox.put(key, data);
+    readdata();
+
   }
 
   readdata() {
@@ -56,39 +62,37 @@ readdata();
         "desc": dataitem["desc"]
       };
     }).toList();
-    
-
 
     setState(() {
-       
-       myalldata=data.reversed.toList();
+      myalldata = data.reversed.toList();
 
-
-       print(myalldata);
-
-
-
+      print(myalldata);
     });
-
-
-
-
-
-
-
-
   }
 
-@override
+  deletedata(int? key) async {
+    await taskbox.delete(key);
+
+    readdata();
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     readdata();
   }
 
-
-
   void showmodel(context, int? key) {
+    titleController.clear();
+    descController.clear();
+
+    if (key != null) {
+      final item = myalldata.firstWhere((element) => element["key"] == key);
+      titleController.text = item["title"];
+      descController.text = item["desc"];
+    }
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -120,10 +124,14 @@ readdata();
                       "desc": descController.text.toString(),
                     };
 
-                    createdata(data);
+                    if (key != null) {
+                      updatedata(data, key);
+                    } else {
+                      createdata(data);
+                    }
                     Navigator.pop(context);
                   },
-                  child: Text("Add Text")),
+                  child: key != null ? Text("Update") : Text("Add")),
               SizedBox(
                 height: 20,
               ),
@@ -137,29 +145,38 @@ readdata();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showmodel(context, null);
-        },
-        child: Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        title: Text("Hive Database (NO SQL) "),
-      ),
-      body:ListView.builder(itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(myalldata[index]["title"]),
-          subtitle: Text(myalldata[index]["desc"]),
-          
-          
-          
-          );
-      },
-      
-        itemCount: myalldata.length,
-      
-      
-      )
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showmodel(context, null);
+          },
+          child: Icon(Icons.add),
+        ),
+        appBar: AppBar(
+          title: Text("Hive Database (NO SQL) "),
+        ),
+        body: ListView.builder(
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(myalldata[index]["title"]),
+              subtitle: Text(myalldata[index]["desc"]),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        showmodel(context, myalldata[index]["key"]);
+                      },
+                      icon: Icon(Icons.edit)),
+                  IconButton(
+                      onPressed: () {
+                        deletedata(myalldata[index]["key"]);
+                      },
+                      icon: Icon(Icons.delete))
+                ],
+              ),
+            );
+          },
+          itemCount: myalldata.length,
+        ));
   }
 }
