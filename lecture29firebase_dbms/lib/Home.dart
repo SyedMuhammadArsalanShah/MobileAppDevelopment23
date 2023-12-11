@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lecture29firebase_dbms/Login.dart';
 
@@ -18,12 +19,16 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Login(),
-                    ));
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut().then(
+                  (value) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ));
+                  },
+                );
               },
               icon: Icon(Icons.logout))
         ],
@@ -35,7 +40,7 @@ class _HomeState extends State<Home> {
           color: Colors.indigo[900],
           child: Center(
             child: Text(
-              "Welcome In our home \n خوش آمدید ",
+              "Welcome In our home \n آپ کو  خوش آمدید ",
               style: TextStyle(color: Colors.white, fontSize: 30),
               textAlign: TextAlign.right,
             ),

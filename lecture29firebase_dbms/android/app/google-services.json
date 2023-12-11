@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200950294441",
+    "project_id": "loginsystem-dce15",
+    "storage_bucket": "loginsystem-dce15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200950294441:android:96f9774cfdf21d3b28c6b8",
+        "android_client_info": {
+          "package_name": "com.example.lecture29firebase_dbms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz2cl5u_mP3H_udiavfi07wGW_b9euMlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
