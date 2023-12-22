@@ -1,23 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+// import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:lecture29firebase_dbms/Login.dart';
-import 'package:firebase_database/firebase_database.dart';
+// import 'package:firebase_database/firebase_database.dart'
 import 'package:lecture29firebase_dbms/Toast_msg.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeFirestore extends StatefulWidget {
+  const HomeFirestore({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeFirestore> createState() => _HomeFirestoreState();
 }
 
-class _HomeState extends State<Home> {
-  // FirebaseDatabase database = FirebaseDatabase.instance;
-
-  DatabaseReference ref = FirebaseDatabase.instance.ref("myusers");
+class _HomeFirestoreState extends State<HomeFirestore> {
+  final db = FirebaseFirestore.instance.collection("merestudents");
 
   final key = FirebaseAuth.instance.currentUser!.uid;
+
+  final getalldata = FirebaseFirestore.instance
+      .collection("merestudents")
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("itsmyid ")
+      .snapshots();
 
   int id = 0;
   TextEditingController titleController = TextEditingController();
@@ -56,7 +61,7 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     if (postid == null) {
                       id++;
-                      ref.child(key).child("$id").set({
+                      db.doc(key).collection("itsmyid ").doc("$id").set({
                         "id": id,
                         "dateofpost": DateTime.now().toString(),
                         "title": titleController.text.toString(),
@@ -67,7 +72,7 @@ class _HomeState extends State<Home> {
                         Toast_msg().showMsg(error.toString());
                       });
                     } else {
-                      ref.child(key).child("$postid").update({
+                      db.doc(key).collection("itsmyid ").doc("$postid").update({
                         "id": postid,
                         "dateofpost": DateTime.now().toString(),
                         "title": titleController.text.toString(),
@@ -98,7 +103,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text("Home"),
+          title: Text("HomeFirestore"),
           centerTitle: true,
           actions: [
             IconButton(
@@ -137,22 +142,43 @@ class _HomeState extends State<Home> {
             ),
 
             Expanded(
-              
               child: StreamBuilder(
-                stream: ref.child(key).onValue,
-                builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                  if (!snapshot.hasData) {
+                stream: getalldata,
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else {
-                    Map<dynamic, dynamic> map =
-                        snapshot.data!.snapshot.value as dynamic;
-                    List<dynamic> item = map.values.toList();
                     return ListView.builder(
-                      itemCount: snapshot.data!.snapshot.children.length,
+                      itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
+                        final data = snapshot.data!.docs[index];
                         return ListTile(
-                          title: Text(item[index]["title"].toString()),
-                          subtitle: Text(item[index]["desc"].toString()),
+                          title: Text(data["title"].toString()),
+                          subtitle: Text(data["desc"].toString()),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    final postid = data["id"].toString();
+                                    showformmodel(context, int.parse(postid));
+                                  },
+                                  icon: Icon(Icons.edit)),
+                              IconButton(
+                                  onPressed: () {
+                                    final deleteid = data["id"].toString();
+
+                                    db
+                                        .doc(key)
+                                        .collection("itsmyid ")
+                                        .doc(deleteid)
+                                        .delete();
+
+                                    // Navigator.pop(context);
+                                  },
+                                  icon: Icon(Icons.delete)),
+                            ],
+                          ),
                         );
                       },
                     );
@@ -204,7 +230,7 @@ class _HomeState extends State<Home> {
             //             color: Colors.indigo[900],
             //             child: Center(
             //               child: Text(
-            //                 "Welcome In our home \n آپ کو  خوش آمدید ",
+            //                 "Welcome In our HomeFirestore \n آپ کو  خوش آمدید ",
             //                 style: TextStyle(color: Colors.white, fontSize: 30),
             //                 textAlign: TextAlign.right,
             //               ),
@@ -224,7 +250,7 @@ class _HomeState extends State<Home> {
         //     color: Colors.indigo[900],
         //     child: Center(
         //       child: Text(
-        //         "Welcome In our home \n آپ کو  خوش آمدید ",
+        //         "Welcome In our HomeFirestore \n آپ کو  خوش آمدید ",
         //         style: TextStyle(color: Colors.white, fontSize: 30),
         //         textAlign: TextAlign.right,
         //       ),
