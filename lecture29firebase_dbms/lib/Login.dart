@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lecture29firebase_dbms/HomeFirestore.dart';
+import 'package:lecture29firebase_dbms/ImageScreenDB.dart';
 import 'package:lecture29firebase_dbms/Signup.dart';
 import 'package:lecture29firebase_dbms/Toast_msg.dart';
 
@@ -55,7 +56,8 @@ class _LoginState extends State<Login> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeFirestore(),
+                            // builder: (context) => HomeFirestore(),
+                            builder: (context) => ImageScreenDB(),
                           ));
                     });
                   } on FirebaseAuthException catch (e) {
