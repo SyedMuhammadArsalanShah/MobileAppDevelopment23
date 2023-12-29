@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lecture29firebase_dbms/ForgotScreen.dart';
 import 'package:lecture29firebase_dbms/HomeFirestore.dart';
 import 'package:lecture29firebase_dbms/ImageScreenDB.dart';
 import 'package:lecture29firebase_dbms/Signup.dart';
@@ -15,7 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Toast_msg obj =new Toast_msg();
+  Toast_msg obj = new Toast_msg();
   TextEditingController useremaillogin = TextEditingController();
   TextEditingController userpasslogin = TextEditingController();
 
@@ -78,6 +79,15 @@ class _LoginState extends State<Login> {
                       ));
                 },
                 child: Text("Signup")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ForgotScreen(),
+                      ));
+                },
+                child: Text("Forget Email Pass"))
           ],
         ),
       ),
