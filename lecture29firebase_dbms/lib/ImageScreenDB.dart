@@ -17,26 +17,21 @@ class ImageScreenDB extends StatefulWidget {
 class _ImageScreenDBState extends State<ImageScreenDB> {
   File? image;
 
-  final imagePicker = ImagePicker();
-
-  final storageRef = FirebaseStorage.instance.ref("imagesofsmas");
-
-  DatabaseReference ref = FirebaseDatabase.instance.ref("myusers");
+  final imagepicker = ImagePicker();
+  DatabaseReference dref = FirebaseDatabase.instance.ref("images");
+  final storageRef = FirebaseStorage.instance.ref("NewImagesFolder");
   final key = FirebaseAuth.instance.currentUser!.uid;
-
   int id = 0;
 
-  Future getImagefromGallery() async {
-    final pickedFile = await imagePicker.pickImage(
+  Future getimagefromgallery() async {
+    final pickedFile = await imagepicker.pickImage(
         source: ImageSource.gallery, imageQuality: 100);
-
-    setState(() {
-      if (pickedFile != null) {
-        image = File(pickedFile.path);
-      } else {
-        Toast_msg().showMsg("No image selected");
-      }
-    });
+    setState(() {});
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+    } else {
+      Toast_msg().showMsg("No image Selected");
+    }
   }
 
   @override
@@ -46,14 +41,12 @@ class _ImageScreenDBState extends State<ImageScreenDB> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            image == null
-                ? Text("Here Is an Image ")
-                : Image.file(image!.absolute),
+            image == null ? Text("No Image Here") : Image.file(image!.absolute),
             ElevatedButton(
                 onPressed: () {
-                  getImagefromGallery();
+                  getimagefromgallery();
                 },
-                child: Text("Select Image")),
+                child: Text("Select An Image")),
             ElevatedButton(
                 onPressed: () async {
                   id++;
@@ -61,14 +54,19 @@ class _ImageScreenDBState extends State<ImageScreenDB> {
                   final refimg =
                       await storageRef.child("img").child("$key/$id");
 
-                  UploadTask uploadTask = refimg.putFile(image!.absolute);
+                   UploadTask uploadTask = refimg.putFile(
+                      image!.absolute,
+                      SettableMetadata(
+                        contentType: "image/jpeg",
+                      )
+                      );
 
                   Future.value(uploadTask).then((value) async {
                     final downloadurl = await refimg.getDownloadURL();
 
                     print("Image Url WA910 => $downloadurl");
 
-                    ref
+                    dref
                         .child(key)
                         .child("$id")
                         .set({"Id": id, "imageurl": downloadurl}).then((value) {
